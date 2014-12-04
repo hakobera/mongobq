@@ -1,0 +1,72 @@
+#!/usr/bin/env node
+
+var program = require('commander');
+var MongoBQ = require('../lib/mongobq');
+var pkg = require('../package');
+
+program
+  .version(pkg.version)
+  .option('--host <hostname>', 'Specifies a hostname for the mongod')
+  .option('--port <port>', 'Specifies the TCP port for the mongod', parseInt)
+  .option('-u, --username <username>', 'Specifies a username with which to authenticate')
+  .option('-p, --password <password>', 'Specifies a password with which to authenticate')
+  .option('-d, --db <database>', 'Specifies the name of the database')
+  .option('-c, --collection <collection>', 'Specifies the collection to export')
+  .option('-f, --fields <field1[,field2]>', 'Specifies a field or fields to include in the export')
+  .option('-q, --query <JSON>', 'Provides a JSON document as a query that optionally limits the documents returned in the export')
+  .option('-s, --schema <schemafile>', 'Specifies the table schema of BigQuery table to import')
+  .option('-k, --keyfile <keyfile>', 'Specifies the key file path')
+  .option('--bucket <bucket>', 'Specifies the GCS bucket name')
+  .option('--directory <path>', 'Specifies the GCS directory')
+  .option('--project <project>', 'GCP project ID')
+  .option('--dataset <dataset>', 'BigQuery dataset ID')
+  .option('--table <table>', 'BigQuery table name')
+  .option('--autoclean', 'Auto clearn after run')
+  .option('--async', 'No wait load job')
+  .option('--dryrun', 'Run as dryrun mode')
+  .option('--verbose', 'Show verbose log')
+  .parse(process.argv);
+
+var opts = {
+  host: program.host || 'localhost',
+  port: program.port || 27017,
+  database: program.db,
+  collection: program.collection,
+  username: program.username,
+  password: program.password,
+  query: program.query ? JSON.parse(program.query) : {},
+  fields: program.fields ? program.fields.split(',') : null,
+  project: program.project,
+  keyfile: program.keyfile,
+  bucket: program.bucket,
+  directory: program.directory,
+  dataset: program.dataset,
+  table: program.table,
+  autoclean: program.autoclean,
+  async: program.async,
+  verbose: program.verbose
+};
+
+if (checkArgs(opts)) {
+  new MongoBQ(opts).run();
+} else {
+  program.help();
+}
+
+function checkArgs(args) {
+  if (!required(args, 'database')) return false;
+  if (!required(args, 'collection')) return false;
+  if (!required(args, 'project')) return false;
+  if (!required(args, 'bucket')) return false;
+  if (!required(args, 'dataset')) return false;
+
+  return true;
+}
+
+function required(args, key) {
+  if (!args[key]) {
+    console.error(key + ' must specified.');
+    return false;
+  }
+  return true;
+}
