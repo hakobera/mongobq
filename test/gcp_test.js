@@ -92,12 +92,9 @@ describe('GCP', function () {
         assert.equal(table.type('abc'), 'STRING');
       });
 
-      it ('should return INTEGER when value is integer', function () {
-        //assert.equal(table.type(1), 'INTEGER');
-      });
-
       it ('should return FLOAT when value is float', function () {
-        //assert.equal(table.type(1.0), 'FLOAT');
+        assert.equal(table.type(1), 'FLOAT');
+        assert.equal(table.type(1.0), 'FLOAT');
       });
 
       it ('should return BOOLEAN when value is boolean', function () {
