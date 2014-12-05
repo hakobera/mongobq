@@ -64,7 +64,20 @@ describe('GCP', function () {
 
       it ('should return array when value is array', function () {
         var ary = ['a', 'b', 'c'];
-        assert.equal(table.value(ary), ary);
+        var ret = table.value(ary);
+
+        ary.forEach(function (item, i) {
+          assert.equal(ret[i], ary[i]);
+        });
+      });
+
+      it ('should return array when value is array that include object', function () {
+        var ary = [{key: 'val1'}, {key: 'val2'}];
+        var ret = table.value(ary);
+
+        ary.forEach(function (item, i) {
+          assert.equal(ret[i], JSON.stringify(ary[i]));
+        });
       });
 
       it ('should return JSON string when value is object', function () {
