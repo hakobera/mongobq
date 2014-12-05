@@ -1,5 +1,4 @@
 var assert = require('assert');
-var assert = require('assert');
 var exec = require('child_process').exec;
 var mkdirp = require('mkdirp');
 var path = require('path');
@@ -10,7 +9,7 @@ var binPath = path.resolve(__dirname, '../bin/mongobq');
 var tempDir = path.resolve(__dirname, '../temp');
 
 describe('-h', function () {
-   var dir;
+  var dir;
 
   before(function (done) {
     createEnvironment(function (err, newDir) {
