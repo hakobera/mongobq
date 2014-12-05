@@ -13,7 +13,7 @@ program
   .option('-d, --db <database>', 'Specifies the name of the database')
   .option('-c, --collection <collection>', 'Specifies the collection to export')
   .option('-f, --fields <field1[,field2]>', 'Specifies a field or fields to include in the export')
-  .option('-q, --query <JSON>', 'Provides a JSON document as a query that optionally limits the documents returned in the export')
+  .option('-q, --query <JSON>', 'Provides a JSON document as a query that optionally limits the documents returned in the export', JSON.parse)
   .option('-s, --schema <schemafile>', 'Specifies the table schema of BigQuery table to import')
   .option('-k, --keyfile <keyfile>', 'Specifies the key file path')
   .option('--bucket <bucket>', 'Specifies the GCS bucket name')
@@ -34,7 +34,7 @@ var opts = {
   collection: program.collection,
   username: program.username,
   password: program.password,
-  query: program.query ? JSON.parse(program.query) : {},
+  query: program.query || {},
   fields: program.fields ? program.fields.split(',') : null,
   project: program.project,
   keyfile: program.keyfile,
