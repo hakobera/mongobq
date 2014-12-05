@@ -35,7 +35,7 @@ var opts = {
   username: program.username,
   password: program.password,
   query: program.query || {},
-  fields: program.fields ? program.fields.split(',') : null,
+  fields: program.fields ? program.fields.split(',') : [],
   project: program.project,
   keyfile: program.keyfile,
   bucket: program.bucket,
