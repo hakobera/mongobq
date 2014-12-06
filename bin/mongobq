@@ -23,6 +23,7 @@ program
   .option('--table <table>', 'BigQuery table name')
   .option('--autoclean', 'Auto clearn after run')
   .option('--async', 'No wait load job')
+  .option('--streaming', 'Streaming insert to BigQuery')
   .option('--dryrun', 'Run as dryrun mode')
   .option('--verbose', 'Show verbose log')
   .parse(process.argv);
@@ -45,6 +46,7 @@ var opts = {
   autoclean: program.autoclean,
   async: program.async,
   dryrun: program.dryrun,
+  streaming: program.streaming,
   verbose: program.verbose
 };
 
