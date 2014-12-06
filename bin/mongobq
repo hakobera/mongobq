@@ -44,6 +44,7 @@ var opts = {
   table: program.table,
   autoclean: program.autoclean,
   async: program.async,
+  dryrun: program.dryrun,
   verbose: program.verbose
 };
 
