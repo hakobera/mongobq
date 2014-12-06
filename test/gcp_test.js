@@ -40,31 +40,31 @@ describe('GCP', function () {
 
     describe('#value', function () {
       it ('should return original value when value is string', function () {
-        assert.equal(table.value('abc'), 'abc');
+        assert.equal(GCP.BigQueryTable.value('abc'), 'abc');
       });
 
       it ('should return original value when value is number', function () {
-        assert.equal(table.value(1.0), 1.0);
+        assert.equal(GCP.BigQueryTable.value(1.0), 1.0);
       });
 
       it ('should return original value when value is boolean', function () {
-        assert.equal(table.value(true), true);
-        assert.equal(table.value(false), false);
+        assert.equal(GCP.BigQueryTable.value(true), true);
+        assert.equal(GCP.BigQueryTable.value(false), false);
       });
 
       it ('should return formated string when value is Date', function () {
         var date = new Date(Date.parse('2014-12-21T01:02:03'));
-        assert.equal(table.value(date), '2014-12-21 01:02:03');
+        assert.equal(GCP.BigQueryTable.value(date), '2014-12-21 01:02:03');
       });
 
       it ('should return string when value is mongodb.ObjectID', function () {
         var id = new ObjectID();
-        assert.equal(table.value(id), id.toString());
+        assert.equal(GCP.BigQueryTable.value(id), id.toString());
       });
 
       it ('should return array when value is array', function () {
         var ary = ['a', 'b', 'c'];
-        var ret = table.value(ary);
+        var ret = GCP.BigQueryTable.value(ary);
 
         ary.forEach(function (item, i) {
           assert.equal(ret[i], ary[i]);
@@ -73,7 +73,7 @@ describe('GCP', function () {
 
       it ('should return array when value is array that include object', function () {
         var ary = [{key: 'val1'}, {key: 'val2'}];
-        var ret = table.value(ary);
+        var ret = GCP.BigQueryTable.value(ary);
 
         ary.forEach(function (item, i) {
           assert.equal(ret[i], JSON.stringify(ary[i]));
@@ -82,54 +82,54 @@ describe('GCP', function () {
 
       it ('should return JSON string when value is object', function () {
         var obj = { key: 'val' };
-        assert.equal(table.value(obj), JSON.stringify(obj));
+        assert.equal(GCP.BigQueryTable.value(obj), JSON.stringify(obj));
       });
     });
 
 
     describe('#type', function () {
       it ('should return STRING value when value is string', function () {
-        assert.equal(table.type('abc'), 'STRING');
+        assert.equal(GCP.BigQueryTable.type('abc'), 'STRING');
       });
 
       it ('should return FLOAT when value is float', function () {
-        assert.equal(table.type(1), 'FLOAT');
-        assert.equal(table.type(1.0), 'FLOAT');
+        assert.equal(GCP.BigQueryTable.type(1), 'FLOAT');
+        assert.equal(GCP.BigQueryTable.type(1.0), 'FLOAT');
       });
 
       it ('should return BOOLEAN when value is boolean', function () {
-        assert.equal(table.type(true), 'BOOLEAN');
-        assert.equal(table.type(false), 'BOOLEAN');
+        assert.equal(GCP.BigQueryTable.type(true), 'BOOLEAN');
+        assert.equal(GCP.BigQueryTable.type(false), 'BOOLEAN');
       });
 
       it ('should return TIMESTAMP when value is Date', function () {
         var date = new Date(Date.parse('2014-12-21T01:02:03'));
-        assert.equal(table.type(date), 'TIMESTAMP');
+        assert.equal(GCP.BigQueryTable.type(date), 'TIMESTAMP');
       });
 
       it ('should return STRING when value is mongodb.ObjectID', function () {
         var id = new ObjectID();
-        assert.equal(table.type(id), 'STRING');
+        assert.equal(GCP.BigQueryTable.type(id), 'STRING');
       });
 
       it ('should return STRING when value is array', function () {
         var ary = ['a', 'b', 'c'];
-        assert.equal(table.type(ary), 'STRING');
+        assert.equal(GCP.BigQueryTable.type(ary), 'STRING');
       });
 
       it ('should return STRING when value is object', function () {
         var obj = { key: 'val' };
-        assert.equal(table.type(obj), 'STRING');
+        assert.equal(GCP.BigQueryTable.type(obj), 'STRING');
       });
     });
 
     describe('#mode', function () {
       it ('should return REPEATED when value is array', function () {
-        assert.equal(table.mode([]), 'REPEATED');
+        assert.equal(GCP.BigQueryTable.mode([]), 'REPEATED');
       });
 
       it ('should return NULLABLE when value is not array', function () {
-        assert.equal(table.mode('a'), 'NULLABLE');
+        assert.equal(GCP.BigQueryTable.mode('a'), 'NULLABLE');
       });
     });
 
@@ -137,7 +137,7 @@ describe('GCP', function () {
       it ('should return correct column definition', function () {
         var key = 'key:1';
         var val = 'val';
-        var ret = table.column(key, val);
+        var ret = GCP.BigQueryTable.column(key, val);
 
         assert.equal(ret.name, 'key_1');
         assert.equal(ret.type, 'STRING');
