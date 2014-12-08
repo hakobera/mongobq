@@ -25,6 +25,7 @@ program
   .option('-S, --schema <schemafile>', 'specifies the table schema of BigQuery table to import', parseSchema)
   .option('--autoclean', 'clean after run')
   .option('--async', 'no wait load job')
+  .option('--nocompress', 'nocompress data when upload to Google Cloud Storage')
   .option('--dryrun', 'run as dryrun mode')
   .parse(process.argv);
 
@@ -46,6 +47,7 @@ var opts = {
   schema: program.schema,
   autoclean: program.autoclean,
   async: program.async,
+  compress: !program.nocompress,
   dryrun: program.dryrun
 };
 
