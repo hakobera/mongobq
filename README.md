@@ -27,8 +27,9 @@ Tool to import MongoDB collection into BigQuery
     -T, --table <table>             specifies the table ID of BigQuery
     -S, --schema <schemafile>       specifies the table schema of BigQuery table to import
     --autoclean                     clean after run
-    --async                         No wait load job
-    --dryrun                        Run as dryrun mode
+    --async                         no wait load job
+    --nocompress                    nocompress data when upload to Google Cloud Storage
+    --dryrun                        run as dryrun mode
 ```
 
 ## License
