@@ -3,6 +3,8 @@
 var program = require('commander');
 var MongoBQ = require('../lib/mongobq');
 var pkg = require('../package');
+var path = require('path');
+var fs = require('fs');
 
 program
   .version(pkg.version)
@@ -14,16 +16,15 @@ program
   .option('-c, --collection <collection>', 'Specifies the collection to export')
   .option('-f, --fields <field1[,field2]>', 'Specifies a field or fields to include in the export')
   .option('-q, --query <JSON>', 'Provides a JSON document as a query that optionally limits the documents returned in the export', JSON.parse)
-  .option('-s, --schema <schemafile>', 'Specifies the table schema of BigQuery table to import')
   .option('-k, --keyfile <keyfile>', 'Specifies the key file path')
   .option('--bucket <bucket>', 'Specifies the GCS bucket name')
   .option('--directory <path>', 'Specifies the GCS directory')
   .option('--project <project>', 'GCP project ID')
   .option('--dataset <dataset>', 'BigQuery dataset ID')
-  .option('--table <table>', 'BigQuery table name')
+  .option('-t, --table <table>', 'BigQuery table name')
+  .option('-s, --schema <schemafile>', 'Specifies the table schema of BigQuery table to import')
   .option('--autoclean', 'Auto clearn after run')
   .option('--async', 'No wait load job')
-  .option('--streaming', 'Streaming insert to BigQuery')
   .option('--dryrun', 'Run as dryrun mode')
   .option('--verbose', 'Show verbose log')
   .parse(process.argv);
@@ -43,10 +44,10 @@ var opts = {
   directory: program.directory,
   dataset: program.dataset,
   table: program.table,
+  schema: program.schema ? parseSchema(program.schema): null,
   autoclean: program.autoclean,
   async: program.async,
   dryrun: program.dryrun,
-  streaming: program.streaming,
   verbose: program.verbose
 };
 
@@ -72,4 +73,13 @@ function required(args, key) {
     return false;
   }
   return true;
+}
+
+function parseSchema(schemaFile) {
+  try {
+    return JSON.parse(fs.readFileSync(schemaFile, { encoding: 'utf8' }));
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
+  }
 }

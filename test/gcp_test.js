@@ -144,5 +144,39 @@ describe('GCP', function () {
         assert.equal(ret.mode, 'NULLABLE');
       });
     });
+
+    describe('#convertSchemaFields', function () {
+      var fields;
+
+      beforeEach(function () {
+        fields = [];
+      });
+
+      it ('should convert has to array that sorted by key as alphabet order, but special fields "id" is always first column', function () {
+        var schema = {
+          abc: {
+            "name": "abc",
+            "type": "STRING"
+          },
+
+          id: {
+            "name": "id",
+            "type": "STRING"
+          },
+
+          def: {
+            "name": "def",
+            "type": "STRING"
+          }
+        };
+
+        GCP.BigQueryTable.convertSchemaFields(schema, fields);
+
+        assert.equal(fields.length, 3);
+        assert.equal(fields[0].name, 'id');
+        assert.equal(fields[1].name, 'abc');
+        assert.equal(fields[2].name, 'def');
+      });
+    });
   });
 });
