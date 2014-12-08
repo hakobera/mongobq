@@ -8,25 +8,24 @@ var fs = require('fs');
 
 program
   .version(pkg.version)
-  .option('--host <hostname>', 'Specifies a hostname for the mongod')
-  .option('--port <port>', 'Specifies the TCP port for the mongod', parseInt)
-  .option('-u, --username <username>', 'Specifies a username with which to authenticate')
-  .option('-p, --password <password>', 'Specifies a password with which to authenticate')
-  .option('-d, --db <database>', 'Specifies the name of the database')
-  .option('-c, --collection <collection>', 'Specifies the collection to export')
-  .option('-f, --fields <field1[,field2]>', 'Specifies a field or fields to include in the export')
-  .option('-q, --query <JSON>', 'Provides a JSON document as a query that optionally limits the documents returned in the export', JSON.parse)
-  .option('-k, --keyfile <keyfile>', 'Specifies the key file path')
-  .option('--bucket <bucket>', 'Specifies the GCS bucket name')
-  .option('--directory <path>', 'Specifies the GCS directory')
-  .option('--project <project>', 'GCP project ID')
-  .option('--dataset <dataset>', 'BigQuery dataset ID')
-  .option('-t, --table <table>', 'BigQuery table name')
-  .option('-s, --schema <schemafile>', 'Specifies the table schema of BigQuery table to import', parseSchema)
-  .option('--autoclean', 'Auto clearn after run')
-  .option('--async', 'No wait load job')
-  .option('--dryrun', 'Run as dryrun mode')
-  .option('--verbose', 'Show verbose log')
+  .option('--host <hostname>', 'specifies a hostname for the mongod. (Default: "localhost")')
+  .option('--port <port>', 'specifies the TCP port for the mongod. (Default: 27017)', parseInt)
+  .option('-u, --username <username>', 'specifies a mongodb username to authenticate')
+  .option('-p, --password <password>', 'specifies a mongodb password to authenticate')
+  .option('-d, --db <database>', 'specifies the name of the database')
+  .option('-c, --collection <collection>', 'specifies the collection to export')
+  .option('-f, --fields <field1[,field2]>', 'specifies a field or fields to include in the export')
+  .option('-q, --query <JSON>', 'provides a JSON document as a query that optionally limits the documents returned in the export', JSON.parse)
+  .option('-K, --keyfile <keyfile>', 'specifies the key file path')
+  .option('-B, --bucket <bucket>', 'specifies the Google Cloud Storage bucket name')
+  .option('-O, --path <path>', 'specifies the output path of the bucket (Default: "/")')
+  .option('-P, --project <project>', 'specifies the project ID of Google Cloud Platform')
+  .option('-D, --dataset <dataset>', 'specifies the dataset ID of BigQuery')
+  .option('-T, --table <table>', 'specifies the table ID of BigQuery')
+  .option('-S, --schema <schemafile>', 'specifies the table schema of BigQuery table to import', parseSchema)
+  .option('--autoclean', 'clean after run')
+  .option('--async', 'no wait load job')
+  .option('--dryrun', 'run as dryrun mode')
   .parse(process.argv);
 
 var opts = {
@@ -47,8 +46,7 @@ var opts = {
   schema: program.schema,
   autoclean: program.autoclean,
   async: program.async,
-  dryrun: program.dryrun,
-  verbose: program.verbose
+  dryrun: program.dryrun
 };
 
 if (checkArgs(opts)) {

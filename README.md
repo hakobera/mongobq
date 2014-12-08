@@ -2,7 +2,7 @@
 
 Tool to import MongoDB collection into BigQuery
 
-## How to use
+## Usage
 
 ```
   Usage: mongobq [options]
@@ -11,25 +11,24 @@ Tool to import MongoDB collection into BigQuery
 
     -h, --help                      output usage information
     -V, --version                   output the version number
-    --host <hostname>               Specifies a hostname for the mongod
-    --port <port>                   Specifies the TCP port for the mongod
-    -u, --username <username>       Specifies a username with which to authenticate
-    -p, --password <password>       Specifies a password with which to authenticate
-    -d, --db <database>             Specifies the name of the database
-    -c, --collection <collection>   Specifies the collection to export
-    -f, --fields <field1[,field2]>  Specifies a field or fields to include in the export
-    -q, --query <JSON>              Provides a JSON document as a query that optionally limits the documents returned in the export
-    -k, --keyfile <keyfile>         Specifies the key file path
-    --bucket <bucket>               Specifies the GCS bucket name
-    --directory <path>              Specifies the GCS directory
-    --project <project>             GCP project ID
-    --dataset <dataset>             BigQuery dataset ID
-    -t, --table <table>             BigQuery table name
-    -s, --schema <schemafile>       Specifies the table schema of BigQuery table to import
-    --autoclean                     Auto clearn after run
+    --host <hostname>               specifies a hostname for the mongod
+    --port <port>                   specifies the TCP port for the mongod
+    -u, --username <username>       specifies a mongodb username to authenticate
+    -p, --password <password>       specifies a mongodb password to authenticate
+    -d, --db <database>             specifies the name of the database
+    -c, --collection <collection>   specifies the collection to export
+    -f, --fields <field1[,field2]>  specifies a field or fields to include in the export
+    -q, --query <JSON>              provides a JSON document as a query that optionally limits the documents returned in the export
+    -K, --keyfile <keyfile>         specifies the key file path
+    -B, --bucket <bucket>           specifies the Google Cloud Storage bucket name
+    -O, --path <path>               specifies the output path of the bucket (Default: "/")
+    -P, --project <project>         specifies the project ID of Google Cloud Platform
+    -D, --dataset <dataset>         specifies the dataset ID of BigQuery
+    -T, --table <table>             specifies the table ID of BigQuery
+    -S, --schema <schemafile>       specifies the table schema of BigQuery table to import
+    --autoclean                     clean after run
     --async                         No wait load job
     --dryrun                        Run as dryrun mode
-    --verbose                       Show verbose log
 ```
 
 ## License
