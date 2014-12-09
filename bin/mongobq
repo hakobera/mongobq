@@ -19,6 +19,7 @@ program
   .option('-K, --keyfile <keyfile>', 'specifies the key file path')
   .option('-B, --bucket <bucket>', 'specifies the Google Cloud Storage bucket name')
   .option('-O, --path <path>', 'specifies the output path of the bucket (Default: "/")')
+  .option('-X, --suffix <suffix format>', 'specifies the suffix format (Default: "YYYYMMDDHHmmss")')
   .option('-P, --project <project>', 'specifies the project ID of Google Cloud Platform')
   .option('-D, --dataset <dataset>', 'specifies the dataset ID of BigQuery')
   .option('-T, --table <table>', 'specifies the table ID of BigQuery')
@@ -42,6 +43,7 @@ var opts = {
   keyfile: program.keyfile,
   bucket: program.bucket,
   path: program.path,
+  suffix: program.suffix,
   dataset: program.dataset,
   table: program.table,
   schema: program.schema,
