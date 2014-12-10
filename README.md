@@ -15,7 +15,7 @@
     --port <port>                   specifies the TCP port for the mongod. (Default: 27017)
     -u, --username <username>       specifies a mongodb username to authenticate
     -p, --password <password>       specifies a mongodb password to authenticate
-    -d, --db <database>             specifies the name of the database
+    -d, --database <database>       specifies the name of the database
     -c, --collection <collection>   specifies the collection to export
     -f, --fields <field1[,field2]>  specifies a field or fields to include in the export
     -q, --query <JSON>              provides a JSON document as a query that optionally limits the documents returned in the export
