@@ -1,18 +1,12 @@
 {
   "name": "mongobq",
+  "description": "Command line tool to import MongoDB collection into BigQuery",
   "version": "0.1.0",
-  "description": "Tool to export MongoDB collection into BigQuery",
   "author": "Kazuyuki Honda <hakobera@gmail.com>",
-  "license": "Apache License Version 2.0",
-  "main": "bin/mongobq",
-  "scripts": {
-    "test": "mocha --reporter spec --bail --check-leaks test/",
-    "test-travis": "mocha --reporter spec --bail --check-leaks test/"
+  "bin": "./bin/mongobq",
+  "bugs": {
+    "url": "https://github.com/hakobera/mongobq/issues"
   },
-  "keywords": [
-    "mongodb",
-    "bigquery"
-  ],
   "dependencies": {
     "async": "^0.9.0",
     "commander": "^2.5.0",
@@ -20,17 +14,38 @@
     "moment": "^2.8.4",
     "mongodb": "^2.0.9",
     "through2": "^0.6.3",
-    "underscore": "^1.7.0",
-    "uuid": "^2.0.1"
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "mkdirp": "^0.5.0",
     "mocha": "^2.0.1",
     "rimraf": "^2.2.8",
-    "should": "^4.3.0",
-    "supertest": "^0.15.0"
+    "should": "^4.3.0"
   },
   "engines": {
     "node": ">= 0.10.0"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "test/",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
+  "homepage": "https://github.com/hakobera/mongobq",
+  "keywords": [
+    "mongodb",
+    "bigquery"
+  ],
+  "license": "Apache License, Version 2.0",
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hakobera/mongobq"
+  },
+  "scripts": {
+    "test": "mocha --reporter spec --bail --check-leaks test/",
+    "test-travis": "mocha --reporter spec --bail --check-leaks test/"
   }
 }
