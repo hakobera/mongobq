@@ -12,7 +12,7 @@ program
   .option('--port <port>', 'specifies the TCP port for the mongod. (Default: 27017)', parseInt)
   .option('-u, --username <username>', 'specifies a mongodb username to authenticate')
   .option('-p, --password <password>', 'specifies a mongodb password to authenticate')
-  .option('-d, --db <database>', 'specifies the name of the database')
+  .option('-d, --database <database>', 'specifies the name of the database')
   .option('-c, --collection <collection>', 'specifies the collection to export')
   .option('-f, --fields <field1[,field2]>', 'specifies a field or fields to include in the export')
   .option('-q, --query <JSON>', 'provides a JSON document as a query that optionally limits the documents returned in the export', JSON.parse)
