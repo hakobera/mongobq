@@ -33,7 +33,7 @@ program
 var opts = {
   host: program.host || 'localhost',
   port: program.port || 27017,
-  database: program.db,
+  database: program.database,
   collection: program.collection,
   username: program.username,
   password: program.password,
