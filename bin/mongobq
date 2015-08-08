@@ -26,7 +26,7 @@ program
   .option('-S, --schema <schemafile>', 'specifies the table schema of BigQuery table to import', parseSchema)
   .option('--autoclean', 'clean after run')
   .option('--async', 'no wait load job')
-  .option('--batchsize <batch size>', 'spefies the batch size for each fetch from MongoDB')
+  .option('--batchsize <batch size>', 'spefies the batch size for each fetch from MongoDB', parseInt)
   .option('--nocompress', 'nocompress data when upload to Google Cloud Storage')
   .option('--dryrun', 'run as dryrun mode')
   .parse(process.argv);
