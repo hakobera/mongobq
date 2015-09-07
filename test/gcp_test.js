@@ -1,5 +1,7 @@
 var assert = require('assert');
 var GCP = require('../lib/gcp');
+var moment = require('moment');
+var _ = require('underscore');
 var ObjectID = require('mongodb').ObjectID;
 
 describe('GCP', function () {
@@ -71,18 +73,18 @@ describe('GCP', function () {
         });
       });
 
-      it ('should return array when value is array that include object', function () {
+      it ('should return array of objects when value is array that include object', function () {
         var ary = [{key: 'val1'}, {key: 'val2'}];
         var ret = GCP.BigQueryTable.value(ary);
 
         ary.forEach(function (item, i) {
-          assert.equal(ret[i], JSON.stringify(ary[i]));
+          assert.equal(ret[i], Object(ary[i]));
         });
       });
 
-      it ('should return JSON string when value is object', function () {
+      it ('should return object when value is object', function () {
         var obj = { key: 'val' };
-        assert.equal(GCP.BigQueryTable.value(obj), JSON.stringify(obj));
+        assert.equal(GCP.BigQueryTable.value(obj), Object(obj));
       });
     });
 
@@ -117,9 +119,9 @@ describe('GCP', function () {
         assert.equal(GCP.BigQueryTable.type(ary), 'STRING');
       });
 
-      it ('should return STRING when value is object', function () {
+      it ('should return RECORD when value is object', function () {
         var obj = { key: 'val' };
-        assert.equal(GCP.BigQueryTable.type(obj), 'STRING');
+        assert.equal(GCP.BigQueryTable.type(obj), 'RECORD');
       });
     });
 
@@ -143,6 +145,28 @@ describe('GCP', function () {
         assert.equal(ret.type, 'STRING');
         assert.equal(ret.mode, 'NULLABLE');
       });
+
+      it ('should also include fields if val type is RECORD', function() {
+        var key = 'abc';
+        var val = {a: 123, b: "bbb", c: new Date()};
+        var ret = GCP.BigQueryTable.column(key, val);
+
+        assert.equal(ret.name, 'abc');
+        assert.equal(ret.type, 'RECORD');
+        assert.equal(ret.mode, 'NULLABLE');
+        assert.equal(ret.fields, Object(ret.fields));
+      });
+
+      it ('should be able to detect array value', function (){
+        var key = 'a';
+        var val = [{'one': 1, 'two': 2}, {'one': 11, 'two': 22}];
+        var ret = GCP.BigQueryTable.column(key, val);
+
+        assert.equal(ret.name, 'a');
+        assert.equal(ret.type, 'RECORD');
+        assert.equal(ret.mode, 'REPEATED');
+        assert.equal(ret.fields, Object(ret.fields));
+      });
     });
 
     describe('#convertSchemaFields', function () {
@@ -156,17 +180,71 @@ describe('GCP', function () {
         var schema = {
           abc: {
             "name": "abc",
-            "type": "STRING"
+            "type": "RECORD",
+            "mode": "NULLABLE",
+            "fields": {
+              y: {
+                "name": "y",
+                "type": "DATE",
+                "mode": "NULLABLE"
+              },
+              z: {
+                "name": "z",
+                "type": "STRING",
+                "mode": "NULLABLE"
+              },
+              x: {
+                "name": "x",
+                "type": "RECORD",
+                "mode": "REQUIRED",
+                "fields": {
+                  zz: {
+                    "name": "zz",
+                    "type": "BOOLEAN",
+                    "mode": "NULLABLE"
+                  },
+                  id: {
+                    "name": "id",
+                    "type": "INTEGER",
+                    "mode": "REQUIRED"
+                  },
+                  aa: {
+                    "name": "aa",
+                    "type": "STRING",
+                    "mode": "REPEATED"
+                  }
+                }
+              }
+            }
           },
 
           id: {
             "name": "id",
-            "type": "STRING"
+            "type": "STRING",
+            "mode": "REQUIRED"
           },
 
           def: {
             "name": "def",
-            "type": "STRING"
+            "type": "RECORD",
+            "mode": "REPEATED",
+            "fields": {
+              a: {
+                "name": "a",
+                "type": "INTEGER",
+                "mode": "NULLABLE"
+              },
+              b: {
+                "name": "b",
+                "type": "FLOAT",
+                "mode": "REQUIRED"
+              },
+              c: {
+                "name": "c",
+                "type": "STRING",
+                "mode": "REQUIRED"
+              }
+            }
           }
         };
 
@@ -176,7 +254,100 @@ describe('GCP', function () {
         assert.equal(fields[0].name, 'id');
         assert.equal(fields[1].name, 'abc');
         assert.equal(fields[2].name, 'def');
+        assert.equal(fields[1].fields.length, 3);
+        assert.equal(fields[1].fields[0].name, 'x');
+        assert.equal(fields[1].fields[0].fields.length, 3);
+        assert.equal(fields[1].fields[0].fields[0].name, 'id');
+        assert.equal(fields[1].fields[0].fields[1].name, 'aa');
+        assert.equal(fields[1].fields[0].fields[2].name, 'zz');
+        assert.equal(fields[1].fields[1].name, 'y');
+        assert.equal(fields[1].fields[2].name, 'z');
+        assert.equal(fields[2].fields.length, 3);
+        assert.equal(fields[2].fields[0].name, 'a');
+        assert.equal(fields[2].fields[1].name, 'b');
+        assert.equal(fields[2].fields[2].name, 'c');
       });
+    });
+
+    describe ('#parseJSONLines', function(){
+      it ('should parse recursive JSON objects', function() {
+        var data = {
+          "_id" : ObjectID("5553566950c403ef04f55d76"),
+          "player" : {
+            "status" : "active",
+            "email" : "test@email.com",
+            "photoURL" : "https://google.com",
+            "name" : "Just a test name",
+            "_id" : ObjectID("5551c5ee7a19fd8a05ebf6cf")
+          },
+          "app" : {
+            "company" : ObjectID("00000000000000000000000a"),
+            "facebookAppId" : "1234567890",
+            "num" : 1,
+            "status" : "active",
+            "countries": [],
+            "_id" : ObjectID("55487a238a5458da3701669e")
+          },
+          "created" : {
+            "at" : moment("2015-05-13T13:49:29.907+0000").toDate(),
+            "ref" : "Player",
+            "user" : ObjectID("5551c5ee7a19fd8a05ebf6cf")
+          },
+          "rewardIds" : [
+              12345,
+              67890,
+              -4444
+          ],
+          "localPrice" : 100,
+          "survey" : {
+            "questions" : [
+              "Your mobile number",
+              "What is this?",
+              "Have you try this?"
+            ],
+            "answers" : [
+              {
+                "answer" : [
+                  "08571234567"
+                ]
+              },
+              {
+                "answer" : [
+                  "Reward Voucher"
+                ]
+              },
+              {
+                "answer" : [
+                  "Nope"
+                ]
+              }
+            ],
+            "_id" : ObjectID("554c9e240e6899890a3d0d28")
+          },
+          "code" : "REWARDCODE",
+          "shippingAddress" : null,
+          "status" : "claimed",
+          "__v" : 0
+        };
+
+        var ret = GCP.BigQueryTable.parseJSONLine(Object.keys(data), data, true);
+
+        assert.equal(ret.record, Object(ret.record));
+        assert.equal(ret.schema, Object(ret.schema));
+        assert.equal(ret.record.id, "5553566950c403ef04f55d76");
+        assert.equal(ret.schema.id.type, "STRING");
+        assert.equal(ret.record.app.countries, null);
+        assert.equal(ret.schema.app.fields.countries, null);
+        assert.equal(ret.record.created.at, "2015-05-13 13:49:29");
+        assert.equal(ret.schema.created.fields.at.type, "TIMESTAMP");
+        assert.equal(ret.record.rewardids[0], 12345);
+        assert.equal(ret.schema.rewardids.mode, "REPEATED");
+        assert.equal(ret.record.survey.answers.length, 3);
+        assert.equal(ret.record.survey.answers[0].answer[0], "08571234567");
+        assert.equal(ret.schema.survey.fields.answers.fields.answer.type, "STRING");
+        assert.equal(ret.record.__v, null);
+        assert.equal(ret.schema.__v, null);
+      })
     });
   });
 });
