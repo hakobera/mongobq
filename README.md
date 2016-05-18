@@ -2,6 +2,9 @@
 
 `mongobq` is a command line tool to import MongoDB collection into BigQuery.
 
+mongobq >= 0.2.0 only works with node >= 0.12.0.
+You want to use with node 0.10 or below, use 0.1.4.
+
 ## Usage
 
 ```
