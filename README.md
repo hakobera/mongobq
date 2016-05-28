@@ -22,6 +22,8 @@ You want to use with node 0.10 or below, use 0.1.4.
     -c, --collection <collection>   specifies the collection to export
     -f, --fields <field1[,field2]>  specifies a field or fields to include in the export
     -q, --query <JSON>              provides a JSON document as a query that optionally limits the documents returned in the export
+    -l, --limit <limit>             limit number of documents returned from query
+    -s, --skip <skip>               skip specified number of documents
     -K, --keyfile <keyfile>         specifies the key file path
     -B, --bucket <bucket>           specifies the Google Cloud Storage bucket name
     -O, --path <path>               specifies the output path of the bucket (Default: "/")

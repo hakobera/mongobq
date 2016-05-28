@@ -29,6 +29,8 @@ program
   .option('--batchsize <batch size>', 'spefies the batch size for each fetch from MongoDB', parseInt)
   .option('--nocompress', 'nocompress data when upload to Google Cloud Storage')
   .option('--dryrun', 'run as dryrun mode')
+  .option('-l, --limit <limit>', 'limit number of documents returned from query', parseInt)
+  .option('-s, --skip <skip>', 'skip specified number of documents', parseInt)
   .parse(process.argv);
 
 var opts = {
@@ -52,7 +54,9 @@ var opts = {
   async: program.async,
   batchSize: program.batchsize,
   compress: !program.nocompress,
-  dryrun: program.dryrun
+  dryrun: program.dryrun,
+  limit: program.limit,
+  skip: program.skip
 };
 
 if (checkArgs(opts)) {
