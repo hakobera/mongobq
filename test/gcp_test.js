@@ -15,6 +15,7 @@ describe('GCP', function () {
     it('should replace non alphabet/number/underscore character to underscore', function () {
       assert.equal(GCP.safeName('az_19'), 'az_19');
       assert.equal(GCP.safeName('az:19'), 'az_19');
+      assert.equal(GCP.safeName('az:19:AZ'), 'az_19_az');
     });
 
     it('should remove first underscore', function () {
