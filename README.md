@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/hakobera/mongobq.svg?branch=master)](https://travis-ci.org/hakobera/mongobq)
+
 # mongobq
 
 `mongobq` is a command line tool to import MongoDB collection into BigQuery.
