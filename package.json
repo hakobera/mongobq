@@ -14,7 +14,8 @@
     "moment": "^2.8.4",
     "mongodb": "^2.1.19",
     "through2": "^0.6.5",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "underscore-deep-extend": "0.0.5"
   },
   "devDependencies": {
     "mkdirp": "^0.5.0",
