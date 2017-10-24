@@ -14,7 +14,7 @@ program
   .option('-p, --password <password>', 'specifies a mongodb password to authenticate')
   .option('-d, --database <database>', 'specifies the name of the database')
   .option('-c, --collection <collection>', 'specifies the collection to export')
-  .option('-f, --fields <field1[,field2]>', 'specifies a field or fields to include in the export')
+  .option('-f, --fields <JSON>', 'specifies a field or fields to include in the export', JSON.parse)
   .option('-q, --query <JSON>', 'provides a JSON document as a query that optionally limits the documents returned in the export', JSON.parse)
   .option('-K, --keyfile <keyfile>', 'specifies the key file path')
   .option('-B, --bucket <bucket>', 'specifies the Google Cloud Storage bucket name')
@@ -41,7 +41,7 @@ var opts = {
   username: program.username,
   password: program.password,
   query: program.query || {},
-  fields: parseFields(program.schema, program.fields),
+  fields: program.fields,
   project: program.project,
   keyfile: program.keyfile,
   bucket: program.bucket,
